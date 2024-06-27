@@ -14,7 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -131,7 +131,7 @@ fun FromTo3(
                     )
                 }
 
-                Divider(color = Grey4)
+                HorizontalDivider(color = Grey4)
 
                 Row(
                     modifier = Modifier,
@@ -161,14 +161,12 @@ fun FromTo3(
                             .onFocusChanged { arrivalIsFocused = it.isFocused }
                     )
 
-                    Icon( // TODO delete?
+                    Icon(
                         painter = painterResource(R.drawable.close),
                         contentDescription = stringResource(R.string.button_description_close),
                         modifier = Modifier
                             .clip(CircleShape)
-                            .clickable(
-                                onClick = { }
-                            )
+                            .clickable(onClick = { editArrival("") })
                             .padding(8.dp)
                     )
                 }

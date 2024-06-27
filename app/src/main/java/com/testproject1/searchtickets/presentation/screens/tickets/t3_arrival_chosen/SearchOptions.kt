@@ -1,13 +1,12 @@
 package com.testproject1.searchtickets.presentation.screens.tickets.t3_arrival_chosen
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -18,6 +17,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -50,7 +50,6 @@ import java.time.ZoneOffset
 import java.util.Locale
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchOptions(
@@ -62,8 +61,21 @@ fun SearchOptions(
     val localDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)).toInstant(ZoneOffset.UTC).toEpochMilli()
     var showDeparturePicker by remember {mutableStateOf(false)}
     var showArrivalPicker by remember {mutableStateOf(false)}
-    val departurePickerState = rememberDatePickerState(initialSelectedDateMillis = localDate)
-    val arrivalPickerState = rememberDatePickerState()
+    val departurePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = localDate,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= localDate
+            }
+        }
+    )
+    val arrivalPickerState = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= (departureDate ?: localDate)
+            }
+        }
+    )
 
     fun Long.toFormattedDate(): AnnotatedString {
         val formatter = SimpleDateFormat("dd MMM, EEE", Locale.getDefault())
@@ -76,7 +88,9 @@ fun SearchOptions(
     }
 
     LaunchedEffect(Unit) {
-        if (departureDate == null) changeDepartureDate(localDate)
+        if (departureDate == null) {
+            changeDepartureDate(localDate)
+        }
     }
 
     if (showDeparturePicker) DatePickerDialog(
@@ -98,7 +112,7 @@ fun SearchOptions(
 
                 Button(onClick = {
                     if (arrivalDate != null && arrivalDate < departurePickerState.selectedDateMillis!!) {
-                        arrivalPickerState.setSelection(null)
+                        arrivalPickerState.selectedDateMillis = null
                         changeArrivalDate(null)
                     }
                     changeDepartureDate(departurePickerState.selectedDateMillis!!)
@@ -109,50 +123,47 @@ fun SearchOptions(
             }
         }
     ) {
-        DatePicker(
-            state = departurePickerState,
-            dateValidator = { it >= localDate },
-        )
+        DatePicker(state = departurePickerState,)
     }
 
-    if (showArrivalPicker) DatePickerDialog(
-        onDismissRequest = { showArrivalPicker = false },
-        confirmButton = {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                TextButton(
-                    onClick = {
-                        if (arrivalDate != null) changeArrivalDate(null)
-                        arrivalPickerState.setSelection(null)
-                        showArrivalPicker = false
-                              },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = if (arrivalDate == null) stringResource(R.string.button_text_cancel) else stringResource(R.string.button_text_clear),
-                    )
-                }
+    if (showArrivalPicker) {
+        if (arrivalDate == null) arrivalPickerState.selectedDateMillis = departureDate
 
-                Button(
-                    enabled = arrivalPickerState.selectedDateMillis != null,
-                    onClick = {
-                        changeArrivalDate(arrivalPickerState.selectedDateMillis!!)
-                        showArrivalPicker = false
-                    }
+        DatePickerDialog(
+            onDismissRequest = { showArrivalPicker = false },
+            confirmButton = {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 ) {
-                    Text(text = stringResource(R.string.button_text_choose_date))
+                    TextButton(
+                        onClick = {
+                            if (arrivalDate != null) changeArrivalDate(null)
+                            arrivalPickerState.selectedDateMillis = null
+                            showArrivalPicker = false
+                        },
+                    ) {
+                        Text(
+                            text = if (arrivalDate == null) stringResource(R.string.button_text_cancel) else stringResource(R.string.button_text_clear),
+                        )
+                    }
+
+                    Button(
+                        enabled = arrivalPickerState.selectedDateMillis != null && arrivalPickerState.selectedDateMillis!! >= departureDate!!,
+                        onClick = {
+                            changeArrivalDate(arrivalPickerState.selectedDateMillis!!)
+                            showArrivalPicker = false
+                        }
+                    ) {
+                        Text(text = stringResource(R.string.button_text_choose_date))
+                    }
                 }
             }
+        ) {
+            DatePicker(state = arrivalPickerState,)
         }
-    ) {
-        DatePicker(
-            state = arrivalPickerState,
-            dateValidator = { it >= departureDate!! },
-        )
     }
 
     LazyRow(
@@ -175,6 +186,7 @@ fun SearchOption(text: AnnotatedString, icon: Int?, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .heightIn(min = 32.dp)
             .clip(CircleShape)
             .background(Grey2)
             .clickable { onClick() }

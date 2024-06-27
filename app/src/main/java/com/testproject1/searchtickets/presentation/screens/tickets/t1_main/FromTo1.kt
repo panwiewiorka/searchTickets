@@ -14,7 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -48,10 +49,19 @@ fun FromTo1(
     departure: String,
     arrival: String,
     editDeparture: (String) -> Unit,
+    saveDepartureToDb: () -> Unit,
     showSearchDestinationWindow: (Boolean) -> Unit,
 ) {
     var departureIsFocused by rememberSaveable { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+
+//    var departureValue by remember { mutableStateOf (
+//        TextFieldValue (
+//            text = departure,
+//            selection = TextRange(departure.length)
+//        )
+//    ) }
 
     Box(
         modifier = Modifier
@@ -79,12 +89,12 @@ fun FromTo1(
                     .padding(8.dp)
             )
             Column(
-                modifier = Modifier
-                    .padding(16.dp)
+                modifier = Modifier.padding(16.dp)
             ) {
                 BasicTextField(
                     value = departure,
                     onValueChange = { editDeparture(it.filterCyrillic(context)) },
+//                    onValueChange = { departureValue = TextFieldValue(it.text.filterCyrillic(context), it.selection) },
                     singleLine = true,
                     cursorBrush = SolidColor(White),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -106,12 +116,12 @@ fun FromTo1(
                         .onFocusChanged { departureIsFocused = it.isFocused }
                 )
 
-                Divider(color = Grey5)
+                HorizontalDivider(color = Grey5)
 
                 Text(
-                    text = stringResource(R.string.field_label_to),
+                    text = arrival.ifBlank { stringResource(R.string.field_label_to) },
                     style = MaterialTheme.typography.titleSmall,
-                    color = Grey6,
+                    color = if (arrival.isBlank()) Grey6 else White,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .fillMaxWidth()
@@ -119,7 +129,12 @@ fun FromTo1(
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
-                            onClick = { showSearchDestinationWindow(true) }
+                            onClick = {
+                                focusManager.clearFocus()
+//                                editDeparture(departureValue.text)
+                                saveDepartureToDb()
+                                showSearchDestinationWindow(true)
+                            }
                         )
                 )
 

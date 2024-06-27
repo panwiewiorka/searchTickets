@@ -1,10 +1,10 @@
 package com.testproject1.searchtickets.presentation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -18,18 +18,18 @@ import com.testproject1.searchtickets.presentation.screens.tickets.t1_main.Ticke
 import com.testproject1.searchtickets.presentation.screens.tickets.t3_arrival_chosen.ArrivalChosenScreen
 import com.testproject1.searchtickets.presentation.screens.tickets.t4_all_tickets.AllTicketsScreen
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavScreen(
     navController: NavHostController = rememberNavController(),
 ) {
     val mainViewModel: MainViewModel = hiltViewModel()
+    val appState by mainViewModel.appState.collectAsState()
 
     Scaffold(
         bottomBar = {
             BottomBar(
                 navController = navController,
-                searchDestinationWindowIsVisible = mainViewModel.searchDestinationWindowIsVisible,
+                searchDestinationWindowIsVisible = appState.searchDestinationWindowIsVisible,
                 showSearchDestinationWindow = mainViewModel::showSearchDestinationWindow,
             )
         }
@@ -42,31 +42,26 @@ fun NavScreen(
         ) {
             composable(NavList.TicketsScreen.name) {
                 TicketsMainScreen(
-                    offers = mainViewModel.offers,
-                    departure = mainViewModel.departure,
-                    arrival = mainViewModel.arrival,
+                    state = appState,
                     editDeparture = mainViewModel::editDeparture,
                     editArrival = mainViewModel::editArrival,
-                    searchDestinationWindowIsVisible = mainViewModel.searchDestinationWindowIsVisible,
                     showSearchDestinationWindow = mainViewModel::showSearchDestinationWindow,
-                    hintPage = mainViewModel.hintPage,
+                    getOffers = mainViewModel::getOffers,
                     changeHintPage = mainViewModel::changeHintPage,
+                    saveDepartureToDb = mainViewModel::saveToDb,
                     goToArrivalChosenScreen = { navController.navigate(NavList.ArrivalChosenScreen.name) },
                 )
             }
 
             composable(NavList.ArrivalChosenScreen.name) {
                 ArrivalChosenScreen(
-                    departure = mainViewModel.departure,
-                    arrival = mainViewModel.arrival,
+                    state = appState,
                     editDeparture = mainViewModel::editDeparture,
                     editArrival = mainViewModel::editArrival,
-                    departureDate = mainViewModel.departureDate,
-                    arrivalDate = mainViewModel.arrivalDate,
                     changeDepartureDate = mainViewModel::changeDepartureDate,
                     changeArrivalDate = mainViewModel::changeArrivalDate,
-                    ticketOffers = mainViewModel.ticketOffers,
                     getTicketOffers = mainViewModel::getTicketOffers,
+                    saveDepartureToDb = mainViewModel::saveToDb,
                     goBack = { navController.navigateUp() },
                     goToShowAllTicketsScreen = { navController.navigate(NavList.AllTicketsScreen.name) }
                 )
@@ -74,10 +69,7 @@ fun NavScreen(
 
             composable(NavList.AllTicketsScreen.name) {
                 AllTicketsScreen(
-                    departure = mainViewModel.departure,
-                    arrival = mainViewModel.arrival,
-                    departureDate = mainViewModel.departureDate!!,
-                    tickets = mainViewModel.tickets,
+                    state = appState,
                     getTickets = mainViewModel::getTickets,
                     goBack = { navController.navigateUp() }
                 )

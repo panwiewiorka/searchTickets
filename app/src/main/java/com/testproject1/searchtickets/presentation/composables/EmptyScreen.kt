@@ -1,5 +1,6 @@
 package com.testproject1.searchtickets.presentation.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.testproject1.searchtickets.R
+import com.testproject1.searchtickets.presentation.theme.Black
 
 @Composable
 fun EmptyScreen(
@@ -25,9 +27,11 @@ fun EmptyScreen(
     goBack: (() -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Black.copy(alpha = 0.5f))
     ) {
         if (goBack != null) {
             Button(

@@ -1,31 +1,28 @@
 package com.testproject1.searchtickets.presentation.screens.tickets.t3_arrival_chosen
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.testproject1.searchtickets.TicketOffer
+import com.testproject1.searchtickets.presentation.AppState
+import com.testproject1.searchtickets.presentation.theme.DarkBlue
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ArrivalChosenScreen(
-    departure: String,
-    arrival: String,
+    state: AppState,
     editDeparture: (String) -> Unit,
     editArrival: (String) -> Unit,
-    departureDate: Long?,
-    arrivalDate: Long?,
     changeDepartureDate: (Long) -> Unit,
     changeArrivalDate: (Long?) -> Unit,
-    ticketOffers: List<TicketOffer>?,
     getTicketOffers: () -> Unit,
+    saveDepartureToDb: () -> Unit,
     goBack: () -> Unit,
     goToShowAllTicketsScreen: () -> Unit,
 ) {
@@ -40,11 +37,26 @@ fun ArrivalChosenScreen(
             .fillMaxSize()
             .padding(vertical = 32.dp)
     ) {
-        FromTo3(departure, arrival, editDeparture, editArrival, goBack)
-        SearchOptions(departureDate, arrivalDate, changeDepartureDate, changeArrivalDate)
-        ticketOffers?.let { RecommendedTickets(ticketOffers) }
+        FromTo3(state.departure, state.arrival, editDeparture, editArrival, goBack)
+
+        SearchOptions(state.departureDate, state.arrivalDate, changeDepartureDate, changeArrivalDate)
+
+        if (state.isLoading && state.ticketOffers.isEmpty()) {
+            CircularProgressIndicator(
+                color = DarkBlue,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        } else {
+            RecommendedTickets(state.ticketOffers)
+        }
+
         Spacer(modifier = Modifier.weight(1f))
-        ShowAllTicketsButton(departureDate, goToShowAllTicketsScreen)
+
+        ShowAllTicketsButton(state.departure, state.arrival, state.departureDate) {
+            saveDepartureToDb()
+            goToShowAllTicketsScreen()
+        }
+
         SubscribeSwitch()
     }
 }

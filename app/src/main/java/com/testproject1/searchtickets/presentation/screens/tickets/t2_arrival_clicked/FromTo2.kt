@@ -6,7 +6,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -15,7 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,6 +52,7 @@ fun FromTo2(
     arrival: String,
     editDeparture: (String) -> Unit,
     editArrival: (String) -> Unit,
+    saveDepartureToDb: () -> Unit,
     goToArrivalChosenScreen: () -> Unit,
 //    focusManager: FocusManager
 ) {
@@ -113,7 +113,7 @@ fun FromTo2(
                 )
             }
 
-            Divider(color = Grey4)
+            HorizontalDivider(color = Grey4)
 
             Row(
                 modifier = Modifier,
@@ -128,7 +128,10 @@ fun FromTo2(
                         .clip(CircleShape)
                         .clickable(
                             enabled = searchEnabled,
-                            onClick = goToArrivalChosenScreen
+                            onClick = {
+                                saveDepartureToDb()
+                                goToArrivalChosenScreen()
+                            }
                         )
                         .padding(8.dp)
                 )

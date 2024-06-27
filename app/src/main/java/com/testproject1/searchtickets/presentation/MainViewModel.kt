@@ -1,121 +1,134 @@
 package com.testproject1.searchtickets.presentation
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.testproject1.searchtickets.Offer
 import com.testproject1.searchtickets.TAG
-import com.testproject1.searchtickets.Ticket
-import com.testproject1.searchtickets.TicketOffer
+import com.testproject1.searchtickets.data.AppDao
+import com.testproject1.searchtickets.data.AppData
 import com.testproject1.searchtickets.data.TicketsApi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor (
     private val api: TicketsApi,
+    private val dao: AppDao,
 ): ViewModel() {
 
-    var isLoading by mutableStateOf(false) // todo show circular indicator?
-        private set
-
-    var offers by mutableStateOf(emptyList<Offer>())
-        private set
-
-    var ticketOffers by mutableStateOf(emptyList<TicketOffer>())
-        private set
-
-    var tickets by mutableStateOf(emptyList<Ticket>())
-        private set
-
-    var searchDestinationWindowIsVisible by mutableStateOf(false)
-        private set
-
-    var hintPage by mutableStateOf<Int?>(null)
-        private set
-
-    var departure by mutableStateOf("")
-        private set
-
-    var arrival by mutableStateOf("")
-        private set
-
-    var departureDate by mutableStateOf<Long?>(null)
-        private set
-
-    var arrivalDate by mutableStateOf<Long?>(null)
-        private set
-
+    private val _appState = MutableStateFlow(AppState())
+    val appState: StateFlow<AppState> = _appState.asStateFlow()
 
     init {
-        getOffers() // TODO move to screen, add isLoading
+        CoroutineScope(Dispatchers.Default).launch {
+            val appData = AppData()
+            dao.populateSettings(appData)
+            
+            _appState.update { it.copy(
+                departure = dao.loadSettings().departure
+            ) }
+        }
     }
 
-    private fun getOffers() {
-        isLoading = true
+    fun saveToDb() {
+        viewModelScope.launch {
+            dao.saveSettings(
+                AppData(departure = appState.value.departure)
+            )
+        }
+    }
+    
+    private fun showLoading(show: Boolean) {
+        _appState.update { it.copy(
+            isLoading = show    
+        ) }
+    }
+
+    fun getOffers() {
+        showLoading(true)
         viewModelScope.launch {
             try {
-                offers = api.getConcertOffers().offers
-                isLoading = false
+                _appState.update { it.copy(
+                    offers = api.getConcertOffers().offers
+                ) }
+                showLoading(false)
             } catch (e: Exception) {
-                isLoading = false
+                showLoading(false)
                 Log.e(TAG, "getOffers: ", e)
             }
         }
     }
 
     fun getTicketOffers() {
-        isLoading = true
+        showLoading(true)
         viewModelScope.launch {
             try {
-                ticketOffers = api.getTicketOffers().ticketsOffers
-                isLoading = false
+                _appState.update { it.copy(
+                    ticketOffers = api.getTicketOffers().ticketsOffers
+                ) }
+                showLoading(false)
             } catch (e: Exception) {
-                isLoading = false
+                showLoading(false)
                 Log.e(TAG, "getTicketOffers: ", e)
             }
         }
     }
 
     fun getTickets() {
-        isLoading = true
+        showLoading(true)
         viewModelScope.launch {
             try {
-                tickets = api.getTickets().tickets
-                isLoading = false
+                _appState.update { it.copy(
+                    tickets = api.getTickets().tickets
+                ) }
+                showLoading(false)
             } catch (e: Exception) {
-                isLoading = false
+                showLoading(false)
                 Log.e(TAG, "getTickets: ", e)
             }
         }
     }
 
     fun showSearchDestinationWindow(changeTo: Boolean) {
-        searchDestinationWindowIsVisible = changeTo
+        _appState.update { it.copy(
+            searchDestinationWindowIsVisible = changeTo
+        ) }
     }
 
     fun editDeparture(newText: String) {
-        departure = newText
+        _appState.update { it.copy(
+            departure = newText
+        ) }
     }
 
     fun editArrival(newText: String) {
-        arrival = newText
+        _appState.update { it.copy(
+            arrival = newText
+        ) }
     }
 
     fun changeDepartureDate(newDate: Long) {
-        departureDate = newDate
+        _appState.update { it.copy(
+            departureDate = newDate
+        ) }
     }
 
     fun changeArrivalDate(newDate: Long?) {
-        arrivalDate = newDate
+        _appState.update { it.copy(
+            arrivalDate = newDate
+        ) }
     }
 
     fun changeHintPage(name: Int?) {
-        Log.d(TAG, "changeHintPage: newHintPage = $name, old = $hintPage")
-        hintPage = name
+        _appState.update { it.copy(
+            hintPage = name
+        ) }
     }
 }

@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,9 +33,18 @@ import com.testproject1.searchtickets.presentation.theme.White
 fun Destinations(
     departure: String,
     editArrival: (String) -> Unit,
+    saveDepartureToDb: () -> Unit,
     goToArrivalChosenScreen: () -> Unit,
 ) {
     val context = LocalContext.current
+
+    fun onClick(stringRes: Int) {
+        editArrival(UiText.StringResourse(stringRes).asString(context))
+        if (departure.isNotBlank()) {
+            saveDepartureToDb()
+            goToArrivalChosenScreen()
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -44,18 +53,9 @@ fun Destinations(
             .background(Grey2)
             .padding(16.dp)
     ) {
-        Destination(R.drawable.destination1, R.string.destination_istanbul) {
-            editArrival(UiText.StringResourse(R.string.destination_istanbul).asString(context))
-            if (departure.isNotBlank()) goToArrivalChosenScreen()
-        }
-        Destination(R.drawable.destination2, R.string.destination_sochi) {
-            editArrival(UiText.StringResourse(R.string.destination_sochi).asString(context))
-            if (departure.isNotBlank()) goToArrivalChosenScreen()
-        }
-        Destination(R.drawable.destination3, R.string.destination_phuket) {
-            editArrival(UiText.StringResourse(R.string.destination_phuket).asString(context))
-            if (departure.isNotBlank()) goToArrivalChosenScreen()
-        }
+        Destination(R.drawable.destination1, R.string.destination_istanbul) { onClick(R.string.destination_istanbul) }
+        Destination(R.drawable.destination2, R.string.destination_sochi) { onClick(R.string.destination_sochi) }
+        Destination(R.drawable.destination3, R.string.destination_phuket) { onClick(R.string.destination_phuket) }
     }
 }
 
@@ -96,6 +96,6 @@ fun Destination(image: Int, title: Int, onClick: () -> Unit) {
                 )
             }
         }
-        Divider(color = Grey4, modifier = Modifier.padding(top = 8.dp))
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), color = Grey4)
     }
 }

@@ -35,6 +35,7 @@ fun Hints(
     departure: String,
     editArrival: (String) -> Unit,
     changeHintPage: (Int?) -> Unit,
+    saveDepartureToDb: () -> Unit,
     goToArrivalChosenScreen: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -49,7 +50,10 @@ fun Hints(
         }
         Hint(R.string.hint_destination, R.drawable.ball1, Modifier.weight(1f), Blue) {
             editArrival(UiText.StringResourse(R.string.hint_destination).asString(context))
-            if (departure.isNotBlank()) goToArrivalChosenScreen()
+            if (departure.isNotBlank()) {
+                saveDepartureToDb()
+                goToArrivalChosenScreen()
+            }
         }
         Hint(R.string.hint_weekend, R.drawable.calendar, Modifier.weight(1f), DarkBlue) {
             changeHintPage(R.string.hint_weekend)

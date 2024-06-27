@@ -17,12 +17,14 @@ import com.testproject1.searchtickets.presentation.theme.White
 
 @Composable
 fun ShowAllTicketsButton(
+    departure: String,
+    arrival: String,
     departureDate: Long?,
     onClick: () -> Unit,
 ) {
     Button(
-        enabled = departureDate != null,
-        onClick = { onClick() },
+        enabled = departureDate != null && departure.isNotBlank() && arrival.isNotBlank(),
+        onClick = onClick,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Blue),
         modifier = Modifier

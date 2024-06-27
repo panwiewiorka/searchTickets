@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
 }
 
 android {
@@ -12,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.testproject1.searchtickets"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -94,4 +95,15 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
+    annotationProcessor (libs.androidx.lifecycle)
+    kapt (libs.androidx.lifecycle)
+    kapt (libs.androidx.lifecycle)
+    kapt (libs.androidx.room.compiler)
+//    ksp (libs.androidx.room.compiler)
 }
