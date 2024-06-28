@@ -1,5 +1,7 @@
 package com.testproject1.searchtickets.presentation.screens.tickets.t3_arrival_chosen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.testproject1.searchtickets.presentation.AppState
 import com.testproject1.searchtickets.presentation.theme.DarkBlue
@@ -26,6 +30,8 @@ fun ArrivalChosenScreen(
     goBack: () -> Unit,
     goToShowAllTicketsScreen: () -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(Unit) {
 //        if (ticketOffers.isEmpty())
         getTicketOffers()
@@ -35,6 +41,11 @@ fun ArrivalChosenScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .fillMaxSize()
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = { focusManager.clearFocus() }
+            )
             .padding(vertical = 32.dp)
     ) {
         FromTo3(state.departure, state.arrival, editDeparture, editArrival, goBack)

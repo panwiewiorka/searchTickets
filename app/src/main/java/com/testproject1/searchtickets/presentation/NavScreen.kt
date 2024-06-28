@@ -1,5 +1,10 @@
 package com.testproject1.searchtickets.presentation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -40,7 +45,29 @@ fun NavScreen(
             startDestination = NavList.TicketsScreen.name,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(NavList.TicketsScreen.name) {
+            composable(
+                route = NavList.TicketsScreen.name,
+                enterTransition = {
+                    if (initialState.destination.route == NavList.ArrivalChosenScreen.name) {
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween())
+                    } else fadeIn()
+                                  },
+                exitTransition = {
+                    if (targetState.destination.route == NavList.ArrivalChosenScreen.name) {
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween())
+                    } else fadeOut()
+                                 },
+                popEnterTransition = {
+                    if (initialState.destination.route == NavList.ArrivalChosenScreen.name) {
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween())
+                    } else fadeIn()
+                                     },
+                popExitTransition = {
+                    if (targetState.destination.route == NavList.ArrivalChosenScreen.name) {
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween())
+                    } else fadeOut()
+                                    },
+            ) {
                 TicketsMainScreen(
                     state = appState,
                     editDeparture = mainViewModel::editDeparture,
@@ -53,7 +80,29 @@ fun NavScreen(
                 )
             }
 
-            composable(NavList.ArrivalChosenScreen.name) {
+            composable(
+                route = NavList.ArrivalChosenScreen.name,
+                enterTransition = {
+                    if (initialState.destination.route == NavList.AllTicketsScreen.name) {
+                        slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween())
+                    } else fadeIn()
+                },
+                exitTransition = {
+                    if (targetState.destination.route == NavList.AllTicketsScreen.name) {
+                        slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween())
+                    } else fadeOut()
+                },
+                popEnterTransition = {
+                    if (initialState.destination.route == NavList.AllTicketsScreen.name) {
+                        slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween())
+                    } else fadeIn()
+                                     },
+                popExitTransition = {
+                    if (targetState.destination.route == NavList.AllTicketsScreen.name) {
+                        slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween())
+                    } else fadeOut()
+                                    },
+            ) {
                 ArrivalChosenScreen(
                     state = appState,
                     editDeparture = mainViewModel::editDeparture,
@@ -67,7 +116,13 @@ fun NavScreen(
                 )
             }
 
-            composable(NavList.AllTicketsScreen.name) {
+            composable(
+                route = NavList.AllTicketsScreen.name,
+                enterTransition = { slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween()) },
+                exitTransition = { fadeOut() },
+                popEnterTransition = { fadeIn() },
+                popExitTransition = { slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween()) },
+            ) {
                 AllTicketsScreen(
                     state = appState,
                     getTickets = mainViewModel::getTickets,
