@@ -7,17 +7,17 @@ import retrofit2.http.GET
 
 interface TicketsApi {
 
-    @GET("v3/928dea46-c271-42fb-9f41-9de896c63d23")
+    @GET("uc?id=1o1nX3uFISrG1gR-jr_03Qlu4_KEZWhav")
     suspend fun getConcertOffers(): Offers
 
-    @GET("v3/1b8d3c78-ea10-47e0-8e8e-c4fd10e6709b")
+    @GET("uc?id=13WhZ5ahHBwMiHRXxWPq-bYlRVRwAujta")
     suspend fun getTicketOffers(): TicketOffers
 
-    @GET("v3/b3f71148-a43b-401c-a323-5e37d4a688ed")
+    @GET("uc?id=1HogOsz4hWkRwco4kud3isZHFQLUAwNBA")
     suspend fun getTickets(): Tickets
 
 
     companion object {
-        const val BASE_URL = "https://run.mocky.io/"
+        const val BASE_URL = "https://drive.google.com/"
     }
 }
