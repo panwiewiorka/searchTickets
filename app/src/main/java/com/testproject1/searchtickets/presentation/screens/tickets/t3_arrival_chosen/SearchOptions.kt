@@ -69,13 +69,6 @@ fun SearchOptions(
             }
         }
     )
-    val arrivalPickerState = rememberDatePickerState(
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis >= (departureDate ?: localDate)
-            }
-        }
-    )
 
     fun Long.toFormattedDate(): AnnotatedString {
         val formatter = SimpleDateFormat("dd MMM, EEE", Locale.getDefault())
@@ -103,16 +96,13 @@ fun SearchOptions(
                     .padding(horizontal = 16.dp)
             ) {
                 TextButton(
-                    onClick = {
-                        showDeparturePicker = false
-                    },
+                    onClick = { showDeparturePicker = false },
                 ) {
                     Text(text = stringResource(R.string.button_text_cancel))
                 }
 
                 Button(onClick = {
                     if (arrivalDate != null && arrivalDate < departurePickerState.selectedDateMillis!!) {
-                        arrivalPickerState.selectedDateMillis = null
                         changeArrivalDate(null)
                     }
                     changeDepartureDate(departurePickerState.selectedDateMillis!!)
@@ -127,7 +117,14 @@ fun SearchOptions(
     }
 
     if (showArrivalPicker) {
-        if (arrivalDate == null) arrivalPickerState.selectedDateMillis = departureDate
+        val arrivalPickerState = rememberDatePickerState(
+            initialSelectedDateMillis = arrivalDate,
+            selectableDates = object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                    return utcTimeMillis >= (departureDate ?: localDate)
+                }
+            }
+        )
 
         DatePickerDialog(
             onDismissRequest = { showArrivalPicker = false },
@@ -141,7 +138,6 @@ fun SearchOptions(
                     TextButton(
                         onClick = {
                             if (arrivalDate != null) changeArrivalDate(null)
-                            arrivalPickerState.selectedDateMillis = null
                             showArrivalPicker = false
                         },
                     ) {
