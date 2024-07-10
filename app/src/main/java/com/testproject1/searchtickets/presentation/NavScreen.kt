@@ -108,7 +108,7 @@ fun NavScreen(
                     editDeparture = mainViewModel::editDeparture,
                     editArrival = mainViewModel::editArrival,
                     changeDepartureDate = mainViewModel::changeDepartureDate,
-                    changeArrivalDate = mainViewModel::changeArrivalDate,
+                    changeReturnDate = mainViewModel::changeReturnDate,
                     getTicketOffers = mainViewModel::getTicketOffers,
                     saveDepartureToDb = mainViewModel::saveToDb,
                     goBack = { navController.navigateUp() },

@@ -1,6 +1,7 @@
 package com.testproject1.searchtickets.presentation
 
 import android.util.Log
+import androidx.compose.ui.text.intl.Locale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.testproject1.searchtickets.TAG
@@ -56,7 +57,7 @@ class MainViewModel @Inject constructor (
         viewModelScope.launch {
             try {
                 _appState.update { it.copy(
-                    offers = api.getConcertOffers().offers
+                    offers = if(Locale.current == Locale("ru")) api.getConcertOffersRu().offers else api.getConcertOffers().offers
                 ) }
                 showLoading(false)
             } catch (e: Exception) {
@@ -71,7 +72,7 @@ class MainViewModel @Inject constructor (
         viewModelScope.launch {
             try {
                 _appState.update { it.copy(
-                    ticketOffers = api.getTicketOffers().ticketsOffers
+                    ticketOffers = if(Locale.current == Locale("ru")) api.getTicketOffersRu().ticketsOffers else api.getTicketOffers().ticketsOffers
                 ) }
                 showLoading(false)
             } catch (e: Exception) {
@@ -86,7 +87,7 @@ class MainViewModel @Inject constructor (
         viewModelScope.launch {
             try {
                 _appState.update { it.copy(
-                    tickets = api.getTickets().tickets
+                    tickets = if(Locale.current == Locale("ru")) api.getTicketsRu().tickets else api.getTickets().tickets
                 ) }
                 showLoading(false)
             } catch (e: Exception) {
@@ -120,9 +121,9 @@ class MainViewModel @Inject constructor (
         ) }
     }
 
-    fun changeArrivalDate(newDate: Long?) {
+    fun changeReturnDate(newDate: Long?) {
         _appState.update { it.copy(
-            arrivalDate = newDate
+            returnDate = newDate
         ) }
     }
 

@@ -61,7 +61,7 @@ fun FromTo4(
             )
 
             Text(
-                text = "$formattedDate, 1 пассажир",
+                text = stringResource(R.string.passenger, formattedDate),
                 style = MaterialTheme.typography.displaySmall,
                 color = Grey6,
                 modifier = Modifier.padding(2.dp)

@@ -1,49 +1,56 @@
 <resources>
     <string name="app_name">SearchTickets (test project)</string>
 
-    <string name="screen_tickets">Авиабилеты</string>
-    <string name="screen_hotels">Отели</string>
-    <string name="screen_shortcuts">Короче</string>
-    <string name="screen_subs">Подписки</string>
-    <string name="screen_profile">Профиль</string>
+    <string name="screen_tickets">Tickets</string>
+    <string name="screen_hotels">Hotels</string>
+    <string name="screen_shortcuts">Shortcuts</string>
+    <string name="screen_subs">Subscriptions</string>
+    <string name="screen_profile">Profile</string>
 
-    <string name="screen_arrival_chosen">Поиск. Выбрана страна</string>
-    <string name="screen_all_tickets">Посмотреть все билеты</string>
+    <string name="screen_arrival_chosen">Search. Arrival is chosen</string>
+    <string name="screen_all_tickets">All tickets</string>
 
-    <string name="hint_route">Сложный маршрут</string>
-    <string name="hint_destination">Куда угодно</string>
-    <string name="hint_weekend">Выходные</string>
-    <string name="hint_hot_tickets">Горячие билеты</string>
+    <string name="hint_route">Composite route</string>
+    <string name="hint_destination">Anywhere</string>
+    <string name="hint_weekend">Weekend</string>
+    <string name="hint_hot_tickets">Hot tickets</string>
 
-    <string name="destination_istanbul">Стамбул</string>
-    <string name="destination_sochi">Сочи</string>
-    <string name="destination_phuket">Пхукет</string>
-    <string name="destination_description">Популярное направление</string>
+    <string name="destination_istanbul">Istanbul</string>
+    <string name="destination_sochi">Sochi</string>
+    <string name="destination_phuket">Phuket</string>
+    <string name="destination_description">Popular destination</string>
 
-    <string name="button_description_search">Поиск</string>
-    <string name="button_description_close">Очистить</string>
-    <string name="button_description_arrow">Назад</string>
-    <string name="button_description_change">Поменять местами пункты отправления и прибытия</string>
+    <string name="button_description_search">Search</string>
+    <string name="button_description_close">Clear</string>
+    <string name="button_description_arrow">Go back</string>
+    <string name="button_description_change">Swap departure and arrival</string>
 
 <!--    <string name="button_text_date_departure"> </string>-->
-    <string name="button_text_date_arrival">обратно</string>
-    <string name="button_text_class">1, эконом</string>
-    <string name="button_text_filters">фильтры</string>
-    <string name="button_text_all_tickets">Посмотреть все билеты</string>
-    <string name="button_text_choose_date">Выбрать</string>
-    <string name="button_text_cancel">Отмена</string>
-    <string name="button_text_clear">Без обратного билета</string>
-    <string name="button_text_filter">Фильтр</string>
-    <string name="button_text_graph">График цен</string>
-    <string name="switch_text_subscribe">Подписка на цену</string>
+    <string name="button_text_date_return">Return</string>
+    <string name="button_text_class">1, economy</string>
+    <string name="button_text_filters">Filters</string>
+    <string name="button_text_all_tickets">Show all tickets</string>
+    <string name="button_text_choose_date">Choose</string>
+    <string name="button_text_cancel">Cancel</string>
+    <string name="button_text_clear">Without return ticket</string>
+    <string name="button_text_filter">Filter</string>
+    <string name="button_text_graph">Prices</string>
+    <string name="switch_text_subscribe">Subscribe</string>
 
-    <string name="field_label_from">Откуда - Москва</string>
-    <string name="field_label_to">Куда - Турция</string>
+    <string name="field_label_from">From - London</string>
+    <string name="field_label_to">To - Istanbul</string>
 
-    <string name="caption_search_tickets">Поиск дешёвых\nавиабилетов</string>
-    <string name="caption_music">Музыкально отлететь</string>
-    <string name="caption_direct_tickets">Прямые рейсы</string>
+    <string name="caption_search_tickets">Cheap flights\nsearch</string>
+    <string name="caption_music">Music tours</string>
+    <string name="caption_direct_tickets">Direct flights</string>
 
-    <string name="alphabet_cyrillic">абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ -</string>
+    <string name="passenger">%1$s, 1 passenger</string>
+    <string name="no_transfers">Direct</string>
+    <string name="hours">%1$s hours</string>
+    <string name="price_from">"from "</string>
+
+    <string name="alphabet">[^A-Za-z- ]</string>
+    <string name="currency">" €"</string>
+
 
 </resources>

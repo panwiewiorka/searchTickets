@@ -51,9 +51,8 @@ sealed class UiText {
 
 
 fun String.filterCyrillic(context: Context): String {
-    return this.filter {
-        UiText.StringResourse(R.string.alphabet_cyrillic).asString(context).contains(it)
-    }
+    val re = Regex(UiText.StringResourse(R.string.alphabet).asString(context))
+    return re.replace(this, "")
 }
 
 fun Int.toFormattedPrice(): String {

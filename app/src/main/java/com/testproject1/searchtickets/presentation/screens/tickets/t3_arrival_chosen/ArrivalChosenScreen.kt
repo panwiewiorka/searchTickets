@@ -24,7 +24,7 @@ fun ArrivalChosenScreen(
     editDeparture: (String) -> Unit,
     editArrival: (String) -> Unit,
     changeDepartureDate: (Long) -> Unit,
-    changeArrivalDate: (Long?) -> Unit,
+    changeReturnDate: (Long?) -> Unit,
     getTicketOffers: () -> Unit,
     saveDepartureToDb: () -> Unit,
     goBack: () -> Unit,
@@ -50,7 +50,7 @@ fun ArrivalChosenScreen(
     ) {
         FromTo3(state.departure, state.arrival, editDeparture, editArrival, goBack)
 
-        SearchOptions(state.departureDate, state.arrivalDate, changeDepartureDate, changeArrivalDate)
+        SearchOptions(state.departureDate, state.returnDate, changeDepartureDate, changeReturnDate)
 
         if (state.isLoading && state.ticketOffers.isEmpty()) {
             CircularProgressIndicator(

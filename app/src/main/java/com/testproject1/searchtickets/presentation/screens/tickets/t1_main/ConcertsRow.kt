@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.testproject1.searchtickets.Offer
 import com.testproject1.searchtickets.R
@@ -79,7 +80,7 @@ fun ConcertCard(
             Icon(painterResource(R.drawable.airplane), contentDescription = null, tint = Grey6)
 
             Text(
-                text = "от " + offer.price.value.toFormattedPrice() + " ₽",
+                text = stringResource(R.string.price_from) + offer.price.value.toFormattedPrice() + stringResource(R.string.currency),
                 style = MaterialTheme.typography.bodyMedium,
                 color = White,
             )

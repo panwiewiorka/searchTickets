@@ -54,13 +54,13 @@ import java.util.Locale
 @Composable
 fun SearchOptions(
     departureDate: Long?,
-    arrivalDate: Long?,
+    returnDate: Long?,
     changeDepartureDate: (Long) -> Unit,
-    changeArrivalDate: (Long?) -> Unit,
+    changeReturnDate: (Long?) -> Unit,
 ) {
     val localDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)).toInstant(ZoneOffset.UTC).toEpochMilli()
     var showDeparturePicker by remember {mutableStateOf(false)}
-    var showArrivalPicker by remember {mutableStateOf(false)}
+    var showReturnPicker by remember {mutableStateOf(false)}
     val departurePickerState = rememberDatePickerState(
         initialSelectedDateMillis = localDate,
         selectableDates = object : SelectableDates {
@@ -102,8 +102,8 @@ fun SearchOptions(
                 }
 
                 Button(onClick = {
-                    if (arrivalDate != null && arrivalDate < departurePickerState.selectedDateMillis!!) {
-                        changeArrivalDate(null)
+                    if (returnDate != null && returnDate < departurePickerState.selectedDateMillis!!) {
+                        changeReturnDate(null)
                     }
                     changeDepartureDate(departurePickerState.selectedDateMillis!!)
                     showDeparturePicker = false
@@ -116,9 +116,9 @@ fun SearchOptions(
         DatePicker(state = departurePickerState,)
     }
 
-    if (showArrivalPicker) {
-        val arrivalPickerState = rememberDatePickerState(
-            initialSelectedDateMillis = arrivalDate,
+    if (showReturnPicker) {
+        val returnPickerState = rememberDatePickerState(
+            initialSelectedDateMillis = returnDate,
             selectableDates = object : SelectableDates {
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                     return utcTimeMillis >= (departureDate ?: localDate)
@@ -127,7 +127,7 @@ fun SearchOptions(
         )
 
         DatePickerDialog(
-            onDismissRequest = { showArrivalPicker = false },
+            onDismissRequest = { showReturnPicker = false },
             confirmButton = {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -137,20 +137,20 @@ fun SearchOptions(
                 ) {
                     TextButton(
                         onClick = {
-                            if (arrivalDate != null) changeArrivalDate(null)
-                            showArrivalPicker = false
+                            if (returnDate != null) changeReturnDate(null)
+                            showReturnPicker = false
                         },
                     ) {
                         Text(
-                            text = if (arrivalDate == null) stringResource(R.string.button_text_cancel) else stringResource(R.string.button_text_clear),
+                            text = if (returnDate == null) stringResource(R.string.button_text_cancel) else stringResource(R.string.button_text_clear),
                         )
                     }
 
                     Button(
-                        enabled = arrivalPickerState.selectedDateMillis != null && arrivalPickerState.selectedDateMillis!! >= departureDate!!,
+                        enabled = returnPickerState.selectedDateMillis != null && returnPickerState.selectedDateMillis!! >= departureDate!!,
                         onClick = {
-                            changeArrivalDate(arrivalPickerState.selectedDateMillis!!)
-                            showArrivalPicker = false
+                            changeReturnDate(returnPickerState.selectedDateMillis!!)
+                            showReturnPicker = false
                         }
                     ) {
                         Text(text = stringResource(R.string.button_text_choose_date))
@@ -158,7 +158,7 @@ fun SearchOptions(
                 }
             }
         ) {
-            DatePicker(state = arrivalPickerState,)
+            DatePicker(state = returnPickerState,)
         }
     }
 
@@ -169,8 +169,8 @@ fun SearchOptions(
         item { Spacer(modifier = Modifier.width(8.dp)) }
         item { SearchOption((departureDate ?: localDate).toFormattedDate(), null) { showDeparturePicker = true } }
         item { SearchOption(
-            text = arrivalDate?.toFormattedDate() ?: AnnotatedString(stringResource(R.string.button_text_date_arrival)),
-            icon = if (arrivalDate != null) null else R.drawable.plus) { showArrivalPicker = true } }
+            text = returnDate?.toFormattedDate() ?: AnnotatedString(stringResource(R.string.button_text_date_return)),
+            icon = if (returnDate != null) null else R.drawable.plus) { showReturnPicker = true } }
         item { SearchOption(AnnotatedString(stringResource(R.string.button_text_class)), R.drawable.person) {} }
         item { SearchOption(AnnotatedString(stringResource(R.string.button_text_filters)), R.drawable.filter) { } }
         item { Spacer(modifier = Modifier.width(8.dp)) }

@@ -14,5 +14,5 @@ data class AppState(
     var departure: String = "",
     var arrival: String = "",
     var departureDate: Long? = null,
-    var arrivalDate: Long? = null,
+    var returnDate: Long? = null,
 )

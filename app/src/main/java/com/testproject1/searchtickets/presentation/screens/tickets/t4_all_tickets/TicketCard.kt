@@ -23,10 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.testproject1.searchtickets.R
 import com.testproject1.searchtickets.Ticket
 import com.testproject1.searchtickets.presentation.theme.Blue
 import com.testproject1.searchtickets.presentation.theme.Grey1
@@ -62,7 +64,7 @@ fun TicketCard(
                 .padding(16.dp)
         ) {
             Text(
-                text = ticket.price.value.toFormattedPrice() + " ₽",
+                text = ticket.price.value.toFormattedPrice() + stringResource(R.string.currency),
                 style = MaterialTheme.typography.titleLarge,
                 color = White,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -110,7 +112,7 @@ fun TicketCard(
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = ticket.departure.airport,
+                        text = ticket.arrival.airport,
                         style = MaterialTheme.typography.displaySmall,
                         color = Grey6
                     )
@@ -119,10 +121,10 @@ fun TicketCard(
                 Spacer(modifier = Modifier.width(16.dp))
 
                 val text = buildAnnotatedString {
-                    append("${difference.toString().replace(".0", "")} ч в пути")
+                    append(stringResource(R.string.hours, difference.toString().replace(".0", "")))
                     if (ticket.hasTransfer) {
                         withStyle(style = SpanStyle(Grey6)) { append(" / ") }
-                        append("Без пересадок")
+                        append(stringResource(R.string.no_transfers))
                     }
                 }
                 Text(

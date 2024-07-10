@@ -7,14 +7,23 @@ import retrofit2.http.GET
 
 interface TicketsApi {
 
-    @GET("uc?id=1o1nX3uFISrG1gR-jr_03Qlu4_KEZWhav")
+    @GET("uc?id=1QLsEdrWMHEaqytEUTAv7abaGo5eeMO2j")
     suspend fun getConcertOffers(): Offers
 
-    @GET("uc?id=13WhZ5ahHBwMiHRXxWPq-bYlRVRwAujta")
+    @GET("uc?id=144YpIHnM5GeSIvOZQ82IK_2vLy6RTaw8")
+    suspend fun getConcertOffersRu(): Offers
+
+    @GET("uc?id=1oj02MNzO-c5pR384FRMPGVnbo6C4Zx1x")
     suspend fun getTicketOffers(): TicketOffers
 
-    @GET("uc?id=1HogOsz4hWkRwco4kud3isZHFQLUAwNBA")
+    @GET("uc?id=1XoCND3a1x6YaCqa563vN4WzeEMk7_Boz")
+    suspend fun getTicketOffersRu(): TicketOffers
+
+    @GET("uc?id=1hWlHN-8vUM8ktXa4ViB7BqDCBeIiFEYM")
     suspend fun getTickets(): Tickets
+
+    @GET("uc?id=1EVAeh3M7WbMoK_MqRCW1PQYJAZZhMNMF")
+    suspend fun getTicketsRu(): Tickets
 
 
     companion object {

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -94,7 +94,7 @@ fun RecommendedTicket(circleColor: Color, title: String, price: Price, timeRange
                     )
 
                     Text(
-                        text = price.value.toFormattedPrice() + " ₽ >",
+                        text = price.value.toFormattedPrice() + stringResource(R.string.currency) + " >",
                         style = MaterialTheme.typography.displaySmall,
                         color = Blue
                     )
@@ -110,6 +110,6 @@ fun RecommendedTicket(circleColor: Color, title: String, price: Price, timeRange
             }
         }
 
-        Divider(color = Grey4, modifier = Modifier.padding(top = 8.dp))
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), color = Grey4)
     }
 }
